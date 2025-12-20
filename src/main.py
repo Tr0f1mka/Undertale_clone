@@ -1,3 +1,5 @@
+from src.game import Game
+
 """
 -------------------------
 -------Точка входа-------
@@ -12,7 +14,11 @@ def main() -> None:
     :return: Данная функция ничего не возвращает
     """
 
-    
+    game = Game()
+
+    game.run()
+
+
 
 if __name__ == "__main__":
     main()

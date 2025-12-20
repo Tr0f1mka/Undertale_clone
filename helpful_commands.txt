@@ -1,0 +1,3 @@
+python -m ensurepip --upgrade  - установка pip в venv
+python -m unittest discover -s tests -p "test_*.py"  - запуск тестов
+python -m venv .venv --upgrade-deps  - создание окружения
