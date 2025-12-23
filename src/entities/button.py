@@ -3,7 +3,6 @@ import pygame
 from src.entities.text import Text
 from src.entities.window import Window
 
-from src.constants import COLOR, WIDTH, HEIGHT
 
 class Button(pygame.sprite.Sprite):
 
@@ -23,12 +22,12 @@ class Button(pygame.sprite.Sprite):
     def deactivate(self):
         self.image = Window((210, 50), self.color)
         self.image = self.image.image
-        text = Text(self.message, 40, self.color)
+        text = Text(self.message, 30, self.color)
         self.image.blit(text.image, ((210-text.image.get_width())//2, (50-text.image.get_height())//2))
 
 
     def activate(self):
         self.image = Window((210, 50), self.active_color)
         self.image = self.image.image
-        text = Text(self.message, 40, self.active_color)
+        text = Text(self.message, 30, self.active_color)
         self.image.blit(text.image, ((210-text.image.get_width())//2, (50-text.image.get_height())//2))

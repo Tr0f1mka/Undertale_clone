@@ -1,9 +1,9 @@
 import pygame
 
-from src.constants import FPS, WIDTH, HEIGHT, ENEMIES
+from src.constants import FPS, WIDTH, HEIGHT
 from src.base_classes.scene import Scene
 from src.scenes.battle.battle_scene import BattleScene
-from src.enemies.sans import Sans
+from src.enemies.sans import Sans, Sans1
 from src.base_classes.player import Player
 
 from src.utilities.dj import DJ
@@ -17,14 +17,15 @@ class Game():
         """
 
         pygame.init()
-        pygame.display.set_icon(pygame.image.load("sprites/red_heart.png"))
+        pygame.display.set_icon(pygame.image.load("sprites/souls/red_soul.png"))
         pygame.display.set_caption("Undertale(clone)")
+        self.dj = DJ()
         self.scenes: dict[str, Scene] = {}
         self.sans = Sans()
-        self.current_scene: Scene = BattleScene(self.sans, Player())
+        self.player = Player()
+        self.current_scene: Scene = BattleScene([self.sans, Sans1()], self.player, self.dj)
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
-        self.dj = DJ()
 
 
     def run(self) -> None:

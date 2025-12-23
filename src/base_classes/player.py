@@ -1,7 +1,5 @@
-import pygame
-
-from src.base_classes.item import Item
-from src.base_classes.weapon import Weapon
+from src.base_classes.items import Item
+from src.base_classes.items import Weapon, Armor
 
 
 class Player():
@@ -12,5 +10,8 @@ class Player():
     max_hp: int = 16+round(83/20*lv)
     hp: int = max_hp
     speed: int = 6
-    cur_weapon: Weapon = Weapon()
+    base_damage: int = 1
+    cur_weapon: Weapon
+    cur_armor: Armor
+    count_attacks: int = 1
     inventory: list[Item] = []

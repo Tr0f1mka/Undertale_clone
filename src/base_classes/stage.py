@@ -3,8 +3,11 @@ from src.base_classes.scene import Scene
 
 class Stage(Scene):
 
+    active: bool = False
+
     def restart(self):
-        pass
+        self.active = True
+        self.all_sprites.empty()
 
     def render(self, screen):
         self.all_sprites.update()

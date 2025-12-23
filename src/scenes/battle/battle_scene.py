@@ -9,29 +9,53 @@ from src.base_classes.scene import Scene
 from src.base_classes.stage import Stage
 
 from src.utilities.dj import DJ
-from src.entities.picture import Picture
 from src.entities.button import Button
+from src.entities.text import Text
+from src.entities.health_bar import HealthBar
 from src.base_classes.enemy import Enemy
 from src.base_classes.player import Player
 
-from src.constants import COLOR, WIDTH, HEIGHT
+from src.constants import COLOR, ACTIONS, WIDTH
 
 
 class BattleScene(Scene):
+    """
+    Сцена битвы
+    """
 
-    def __init__(self, enemy: Enemy, player: Player):
+    def __init__(self, enemies: list[Enemy], player: Player, dj: DJ) -> None:
+        """
+        :param enemy: Текущий враг
+        :param player: Игрок
+        :param dj: Диджей для звуков/темы
+        :return: Ничего
+        """
 
-        self.enemy = enemy
+        self.enemies = enemies
         self.player = player
         self.all_sprites = pygame.sprite.Group()
-        self.all_sprites.add(Picture(self.enemy.image, (WIDTH//2-110, HEIGHT//5-110)))
-        self.dj = DJ()
-        self.dj.set_theme(enemy.__class__.__name__)
+        self.set_sprites_enemies()
+        self.dj = dj
+        self.dj.set_theme(enemies[0].__class__.__name__)
         self.init_buttons()
         self.buttons[0].activate()
-        self.stages: list[Stage] = [BattleStage(self.enemy, self.player), ActionStage(), InventoryStage(self.player), EscapeStage(), PrepareStage(self.enemy.prepare_text)]
+        self.stages: list[Stage] = [BattleStage(self.enemies, self.player, self.dj), ActionStage(self.dj), InventoryStage(self.player, self.dj), EscapeStage(self.dj), PrepareStage(self.enemies)]
         self.cur_stage = 4
         self.menu = True
+        self.init_stats()
+
+
+    def set_sprites_enemies(self) -> None:
+        """
+        Устанавливает координаты спрайтов противников
+        :return: Ничего
+        """
+
+        parts = len(self.enemies)+1
+        for i in range(len(self.enemies)):
+            self.enemies[i].cur_sprite.rect.centerx = int(WIDTH/parts*(i+1))
+            self.all_sprites.add(self.enemies[i].cur_sprite)
+            print(id(self.enemies[i].cur_sprite))
 
 
     def init_buttons(self):
@@ -44,34 +68,48 @@ class BattleScene(Scene):
         self.cur_button = 0
 
 
+    def init_stats(self):
+        nick_name = Text(self.player.name.upper(), 30, COLOR.WHITE, (50, 490))
+        self.all_sprites.add(nick_name)
+        lv = Text(f"УР {self.player.lv}", 30, COLOR.WHITE, (200, 490))
+        self.all_sprites.add(lv)
+        oz = Text("оз", 30, COLOR.WHITE, (400, 486))
+        self.all_sprites.add(oz)
+        self.health_bar = HealthBar(self.player.hp, self.player.max_hp, COLOR.YELLOW, (100, 30), (450, 490))
+        self.all_sprites.add(self.health_bar)
+        self.hp = Text(f"{self.player.hp} / {self.player.max_hp}", 30, COLOR.WHITE, (575, 490))
+        self.all_sprites.add(self.hp)
+
+
     def other_events(self, event):
         if self.menu:
+
             next_but = self.cur_button
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    next_but -= 1
-                    if next_but < 0:
-                        next_but = 0
+
+                if event.key in ACTIONS.LEFT:
+                    next_but = (next_but - 1) % 4
                     self.dj.play_sound("select")
                     self.change_button(next_but)
-                elif event.key == pygame.K_RIGHT:
-                    next_but += 1
-                    if next_but > 3:
-                        next_but = 3
+
+                elif event.key in ACTIONS.RIGHT:
+                    next_but = (next_but + 1) % 4
                     self.dj.play_sound("select")
                     self.change_button(next_but)
-                elif event.key == pygame.K_RETURN:
+
+                elif event.key in ACTIONS.ENTER:
                     self.menu = False
                     self.cur_stage = self.cur_button
                     self.stages[self.cur_stage].restart()
                     self.buttons[self.cur_button].deactivate()
                     self.dj.play_sound("select")
 
+                elif event.key == pygame.K_BACKSPACE:
+                    self.player.hp -= 5
+                    self.health_bar.redraw(self.player.hp)
+
         else:
-            self.menu = self.stages[self.cur_stage].other_events(event)
-            if self.menu:
-                self.buttons[self.cur_button].activate()
-                self.cur_stage = 4
+            self.stages[self.cur_stage].other_events(event)
 
 
     def change_button(self, next_but: int):
@@ -83,6 +121,12 @@ class BattleScene(Scene):
 
     def update(self):
         self.stages[self.cur_stage].update()
+        self.menu = not(self.stages[self.cur_stage].active)
+        if self.menu:
+            self.buttons[self.cur_button].activate()
+            self.cur_stage = 4
+        self.health_bar.redraw(self.player.hp)
+        self.hp.image = Text(f"{self.player.hp} / {self.player.max_hp}", 30, COLOR.WHITE).image
         return super().update()
 
 

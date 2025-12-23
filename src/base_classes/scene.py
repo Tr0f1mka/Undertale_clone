@@ -1,6 +1,6 @@
 import pygame
 
-from src.constants import COLOR
+from src.constants import ACTIONS
 
 class Scene():
 
@@ -14,14 +14,14 @@ class Scene():
         :return: Продолжаем цикл или нет
         """
 
-        for e in events:
-            if e.type == pygame.QUIT:
+        for event in events:
+            if event.type == pygame.QUIT:
                 return False
-            if e.type == pygame.KEYDOWN:
-                print(e.key, e.mod)
-                if e.key == pygame.K_ESCAPE:
+            if event.type == pygame.KEYDOWN:
+                print(event.key)
+                if event.key in ACTIONS.ESCAPE:
                     return False
-            self.other_events(e)
+            self.other_events(event)
 
         return True
 
