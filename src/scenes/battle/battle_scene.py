@@ -70,6 +70,8 @@ class BattleScene(Scene):
 
     def init_stats(self):
         nick_name = Text(self.player.name.upper(), 30, COLOR.WHITE, (50, 490))
+        if "ё" in self.player.name.lower() or "й" in self.player.name.lower():
+            nick_name.rect.y = 487
         self.all_sprites.add(nick_name)
         lv = Text(f"УР {self.player.lv}", 30, COLOR.WHITE, (200, 490))
         self.all_sprites.add(lv)
@@ -103,10 +105,6 @@ class BattleScene(Scene):
                     self.stages[self.cur_stage].restart()
                     self.buttons[self.cur_button].deactivate()
                     self.dj.play_sound("select")
-
-                elif event.key == pygame.K_BACKSPACE:
-                    self.player.hp -= 5
-                    self.health_bar.redraw(self.player.hp)
 
         else:
             self.stages[self.cur_stage].other_events(event)

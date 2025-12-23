@@ -9,5 +9,5 @@ class SeaTea(Heal):
 
 
     def __call__(self):
-        super().__call__()
         self.player.speed += 3
+        return super().__call__()

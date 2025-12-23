@@ -5,6 +5,7 @@ from src.base_classes.scene import Scene
 from src.scenes.battle.battle_scene import BattleScene
 from src.enemies.sans import Sans, Sans1
 from src.base_classes.player import Player
+from src.config import PLAYER_CONFIGS
 
 from src.utilities.dj import DJ
 
@@ -22,7 +23,7 @@ class Game():
         self.dj = DJ()
         self.scenes: dict[str, Scene] = {}
         self.sans = Sans()
-        self.player = Player()
+        self.player = Player(PLAYER_CONFIGS[0])
         self.current_scene: Scene = BattleScene([self.sans, Sans1()], self.player, self.dj)
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()

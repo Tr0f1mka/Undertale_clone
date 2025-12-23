@@ -9,5 +9,5 @@ class LegendaryHero(Heal):
 
 
     def __call__(self):
-        super().__call__()
         self.player.base_damage += 4
+        return super().__call__()

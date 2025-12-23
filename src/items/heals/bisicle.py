@@ -8,8 +8,8 @@ class Bisicle(Heal):
 
 
     def __call__(self):
-        super().__call__()
         self.player.inventory.append(Unisicle(self.player))
+        return super().__call__()
 
 
 class Unisicle(Heal):

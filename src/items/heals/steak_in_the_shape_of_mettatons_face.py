@@ -1,6 +1,6 @@
 from src.base_classes.items import Heal
 
 
-class Starfait(Heal):
-    name = "Стейк в форме лица Меттатона"
+class SteakInTheShapeOfMettatons(Heal):
+    name = "Стейк Меттатона"
     param = 60
