@@ -30,7 +30,7 @@ class BattleScene(Scene):
         :param dj: Диджей для звуков/темы
         :return: Ничего
         """
-
+        super().__init__()
         self.enemies = enemies
         self.player = player
         self.all_sprites = pygame.sprite.Group()
@@ -53,9 +53,9 @@ class BattleScene(Scene):
 
         parts = len(self.enemies)+1
         for i in range(len(self.enemies)):
-            self.enemies[i].cur_sprite.rect.centerx = int(WIDTH/parts*(i+1))
-            self.all_sprites.add(self.enemies[i].cur_sprite)
-            print(id(self.enemies[i].cur_sprite))
+            self.enemies[i].sprite.rect.centerx = int(WIDTH/parts*(i+1))
+            self.all_sprites.add(self.enemies[i].sprite)
+            print(id(self.enemies[i].sprite))
 
 
     def init_buttons(self):
@@ -84,6 +84,7 @@ class BattleScene(Scene):
 
 
     def other_events(self, event):
+
         if self.menu:
 
             next_but = self.cur_button
@@ -108,6 +109,7 @@ class BattleScene(Scene):
 
         else:
             self.stages[self.cur_stage].other_events(event)
+            return
 
 
     def change_button(self, next_but: int):
@@ -119,10 +121,11 @@ class BattleScene(Scene):
 
     def update(self):
         self.stages[self.cur_stage].update()
-        self.menu = not(self.stages[self.cur_stage].active)
-        if self.menu:
-            self.buttons[self.cur_button].activate()
-            self.cur_stage = 4
+        if not self.menu:
+            if not self.stages[self.cur_stage].active:
+                self.menu = True
+                self.cur_stage = 4
+                self.buttons[self.cur_button].activate()
         self.health_bar.redraw(self.player.hp)
         self.hp.image = Text(f"{self.player.hp} / {self.player.max_hp}", 30, COLOR.WHITE).image
         return super().update()

@@ -53,7 +53,7 @@ HEALS   = [AbandonedQuiche, AstronautFood, Bandage, Bisicle, ButterscotchPie, Ci
 # имя, уровень, опыт, золото, здоровье, скорость, оружие, броня, количество атак, инвентарь
 PLAYER_CONFIGS = [
     (
-        "Обычный",
+        "Азаза",
         12,
         31,
         150,

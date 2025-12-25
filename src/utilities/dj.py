@@ -24,7 +24,10 @@ class DJ():
     def set_theme(self, character: str) -> None:
 
         self.cur_theme.stop()
-        self.cur_theme = self.themes[character.lower()]
+        if character in self.themes:
+            self.cur_theme = self.themes[character.lower()]
+        else:
+            self.cur_theme = self.themes["default"]
         self.cur_theme.play(-1)
 
 

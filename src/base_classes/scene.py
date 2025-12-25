@@ -4,10 +4,16 @@ from src.constants import ACTIONS
 
 class Scene():
 
+    active: bool
+    all_sprites: pygame.sprite.Group
+
+
     def __init__(self):
+        self.active = True
         self.all_sprites = pygame.sprite.Group()
 
-    def handle_events(self, events: list[pygame.event.Event]) -> bool:
+
+    def handle_events(self, events: list[pygame.event.Event]):
         """
         Обрабатывает события
         :param events: Список событий
@@ -16,14 +22,13 @@ class Scene():
 
         for event in events:
             if event.type == pygame.QUIT:
-                return False
+                self.active = False
             if event.type == pygame.KEYDOWN:
                 print(event.key)
                 if event.key in ACTIONS.ESCAPE:
-                    return False
+                    self.active = False
             self.other_events(event)
 
-        return True
 
     def other_events(self, event: pygame.event.Event):
         pass

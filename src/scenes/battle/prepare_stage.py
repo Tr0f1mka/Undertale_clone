@@ -13,6 +13,6 @@ class PrepareStage(Stage):
 
         window = Window((900, 230), COLOR.WHITE)
         for i in range(len(enemies)):
-            window.add(Text(enemies[i].prepare_text, 20, COLOR.WHITE, (10, 10+70*i)))
+            window.add(Text(enemies[i].prepare_text, 30, COLOR.WHITE, (10, 10+70*i)))
         window.rect.topleft = (50, 250)
         self.all_sprites.add(window)
